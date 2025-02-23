@@ -1,7 +1,9 @@
 package com.thiaghoul.dslist.dto;
 
 import com.thiaghoul.dslist.entities.Game;
+import com.thiaghoul.dslist.projections.GameMinProjection;
 import jakarta.persistence.Column;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Objects;
 
@@ -24,6 +26,14 @@ public class GameMinDTO {
         this.year = game.getYear();
         this.title = game.getTitle();
         this.id = game.getId();
+    }
+
+    public GameMinDTO(GameMinProjection projection){
+        this.shortDescription = projection.getShortDescription();
+        this.imgUrl = projection.getImgUrl();
+        this.year = projection.getYear();
+        this.title = projection.getTitle();
+        this.id = projection.getId();
     }
 
     public Long getId() {
