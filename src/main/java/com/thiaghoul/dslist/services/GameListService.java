@@ -8,12 +8,14 @@ import com.thiaghoul.dslist.entities.GameList;
 import com.thiaghoul.dslist.projections.GameMinProjection;
 import com.thiaghoul.dslist.repositories.GameListRepository;
 import com.thiaghoul.dslist.repositories.GameRepository;
+import com.thiaghoul.dslist.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameListService {
@@ -42,8 +44,10 @@ public class GameListService {
 
     @Transactional(readOnly = true)
     public GameListDTO findById(Long id){
-        GameListDTO gameListDTO = new GameListDTO(repository.findById(id).get());
-        return gameListDTO;
+        Optional<GameList> gameList = repository.findById(id);
+
+        return gameList.map(GameListDTO::new)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Transactional
